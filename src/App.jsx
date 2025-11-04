@@ -55,9 +55,9 @@ function App() {
 
 
   return (
-    <div className="w-full h-screen bg-black text-white py-44 text-center">
+    <div className="w-full h-screen bg-black text-white py-56 text-center">
       <h1 className="text-4xl font-bold mb-4">Pomodoro Timer</h1>
-      <TimerOptions onSelected={handleSelectedTime} isRunning={isRunning} />
+      <TimerOptions onSelected={handleSelectedTime} isRunning={isRunning} selectedTime={selectedTime} />
       <TimerDisplay timeLeft={timeLeft} />
       <Controls onStart={handleOnStart} onPause={handleOnPush} onReset={handleOnReset} isRunnig={isRunning} isPush={isPush} />
     </div>
