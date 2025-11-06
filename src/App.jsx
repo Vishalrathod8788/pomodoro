@@ -2,12 +2,45 @@ import { useEffect, useState } from "react";
 import { Controls } from "./components/Controls"
 import { TimerDisplay } from "./components/TimerDisplay"
 import { TimerOptions } from "./components/TimerOptions"
+import { ThemeToggle } from "./components/ThemeToggle";
 
 function App() {
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(0);
-  const [isPush, setIsPush] = useState(false);
+
+  //🔵 LOAD: Pehli baar data load karo
+  const getInitialState = () => {
+    const saveData = localStorage.getItem("pomodoroData")
+
+    if (saveData) {
+      return JSON.parse(saveData);
+    }
+
+    return {
+      timeLeft: 25 * 60,
+      isRunning: false,
+      selectedTime: 25,
+      isPush: false
+    };
+  }
+
+  const initialState = getInitialState();
+
+  // State Variable
+  const [timeLeft, setTimeLeft] = useState(initialState.timeLeft);
+  const [isRunning, setIsRunning] = useState(initialState.isRunning);
+  const [selectedTime, setSelectedTime] = useState(initialState.selectedTime);
+  const [isPush, setIsPush] = useState(initialState.isPush);
+
+  //🟢 SAVE: Jab bhi state change ho, save karo
+  useEffect(() => {
+    const dataToSave = {
+      timeLeft,
+      isRunning,
+      selectedTime,
+      isPush
+    };
+
+    localStorage.setItem("pomodoroData", JSON.stringify(dataToSave));
+  }, [timeLeft, isRunning, selectedTime, isPush]);
 
   useEffect(() => {
     if (!isRunning || !isPush) return; // agar paused hai to timer stop
@@ -15,6 +48,8 @@ function App() {
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
+          const audio = new Audio("./preview.mp3");
+          audio.play();
           setIsRunning(false);
           setIsPush(false);
           return 0;
@@ -25,7 +60,6 @@ function App() {
 
     return () => clearInterval(interval);
   }, [isRunning, isPush]);
-
 
   const handleSelectedTime = (minutes) => {
     setSelectedTime(minutes);
@@ -53,13 +87,16 @@ function App() {
     setTimeLeft(selectedTime * 60);
   };
 
-
   return (
-    <div className="w-full h-screen bg-black text-white py-56 text-center">
-      <h1 className="text-4xl font-bold mb-4">Pomodoro Timer</h1>
-      <TimerOptions onSelected={handleSelectedTime} isRunning={isRunning} selectedTime={selectedTime} />
-      <TimerDisplay timeLeft={timeLeft} />
-      <Controls onStart={handleOnStart} onPause={handleOnPush} onReset={handleOnReset} isRunnig={isRunning} isPush={isPush} />
+    <div className="w-full h-screen bg-white text-black dark:bg-black dark:text-white text-center">
+      <ThemeToggle />
+      <div className="max-w-6xl mx-auto flex flex-col justify-center items-center px-4 py-32">
+        <h1 className="text-4xl font-bold mb-2">🍅 Pomodoro Timer</h1>
+        <TimerOptions onSelected={handleSelectedTime} isRunning={isRunning} selectedTime={selectedTime} />
+        <TimerDisplay timeLeft={timeLeft} />
+        <Controls onStart={handleOnStart} onPause={handleOnPush} onReset={handleOnReset} isRunnig={isRunning} isPush={isPush} />
+      </div>
+
     </div>
   )
 }
