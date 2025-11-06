@@ -93,6 +93,13 @@ function App() {
       <div className="max-w-6xl mx-auto flex flex-col justify-center items-center px-4 py-32">
         <h1 className="text-4xl font-bold mb-2">🍅 Pomodoro Timer</h1>
         <TimerOptions onSelected={handleSelectedTime} isRunning={isRunning} selectedTime={selectedTime} />
+        <div className="flex justify-center gap-3 items-center mt-6">
+          <label>Enter Time</label>
+          <input placeholder="Enter Time" className="p-1 border-2 border-gray-600" type="text" value={selectedTime} onChange={(e) => {
+            const newTime = Number(e.target.value);
+            setSelectedTime(newTime);
+            setTimeLeft(newTime * 60);
+          }} /></div>
         <TimerDisplay timeLeft={timeLeft} />
         <Controls onStart={handleOnStart} onPause={handleOnPush} onReset={handleOnReset} isRunnig={isRunning} isPush={isPush} />
       </div>
