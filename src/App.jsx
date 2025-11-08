@@ -115,9 +115,9 @@ function App() {
         <TimerOptions onSelected={handleSelectedTime} isRunning={isRunning} selectedTime={selectedTime} />
         <div className="flex justify-center gap-3 items-center mt-6">
           <label>Set Time</label>
-          <input disabled={isRunning} placeholder="Set Minutes" className="p-1 border-2 border-gray-600 w-30 text-center" type="number" min="0" max="60" value={minutes === 0 ? "" : minutes} onChange={(e) => { handleTimeChange("minutes", e.target.value) }} />
+          <input disabled={isRunning} placeholder="Set Minutes" className="p-1 border-2 border-gray-600 w-30 text-center rounded-lg" type="number" min="0" max="60" value={minutes === 0 ? "" : minutes} onChange={(e) => { handleTimeChange("minutes", e.target.value) }} />
           <span>:</span>
-          <input disabled={isRunning} placeholder="Set Seconds" className="p-1 border-2 border-gray-600 w-30 text-center" type="number" min="0" max="60" value={seconds === 0 ? "" : seconds} onChange={(e) => { handleTimeChange("seconds", e.target.value) }} />
+          <input disabled={isRunning} placeholder="Set Seconds" className="p-1 border-2 border-gray-600 w-30 text-center rounded-lg" type="number" min="0" max="60" value={seconds === 0 ? "" : seconds} onChange={(e) => { handleTimeChange("seconds", e.target.value) }} />
         </div>
 
         <TimerDisplay timeLeft={timeLeft} />
