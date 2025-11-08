@@ -15,9 +15,9 @@ function App() {
     }
 
     return {
-      timeLeft: 25 * 60,
+      timeLeft: 0,
       isRunning: false,
-      selectedTime: 25,
+      selectedTime: 0,
       isPush: false
     };
   }
@@ -29,6 +29,8 @@ function App() {
   const [isRunning, setIsRunning] = useState(initialState.isRunning);
   const [selectedTime, setSelectedTime] = useState(initialState.selectedTime);
   const [isPush, setIsPush] = useState(initialState.isPush);
+  const [minutes, setMinutes] = useState("");
+  const [seconds, setSeconds] = useState("");
 
   //🟢 SAVE: Jab bhi state change ho, save karo
   useEffect(() => {
@@ -67,6 +69,7 @@ function App() {
   }
 
   const handleOnStart = () => {
+
     setIsRunning(true);
     setIsPush(true);
   }
@@ -85,7 +88,24 @@ function App() {
     setIsRunning(false);
     setIsPush(false)
     setTimeLeft(selectedTime * 60);
+    setMinutes(0);
+    setSeconds(0);
   };
+
+  const handleTimeChange = (type, value) => {
+    const num = Number(value);
+
+    // Validate: only 0-60 range, no negative values
+    if (num < 0 || num > 60) return;
+
+    if (type === "minutes") setMinutes(num);
+    if (type === "seconds") setSeconds(num);
+
+    const totalTime = (type === "minutes" ? num * 60 : minutes * 60) +
+      (type === "seconds" ? num : seconds);
+
+    setTimeLeft(totalTime);
+  }
 
   return (
     <div className="w-full h-screen bg-white text-black dark:bg-black dark:text-white text-center">
@@ -94,14 +114,14 @@ function App() {
         <h1 className="text-4xl font-bold mb-2">🍅 Pomodoro Timer</h1>
         <TimerOptions onSelected={handleSelectedTime} isRunning={isRunning} selectedTime={selectedTime} />
         <div className="flex justify-center gap-3 items-center mt-6">
-          <label>Enter Time</label>
-          <input placeholder="Enter Time" className="p-1 border-2 border-gray-600" type="text" value={selectedTime} onChange={(e) => {
-            const newTime = Number(e.target.value);
-            setSelectedTime(newTime);
-            setTimeLeft(newTime * 60);
-          }} /></div>
+          <label>Set Time</label>
+          <input disabled={isRunning} placeholder="Set Minutes" className="p-1 border-2 border-gray-600 w-30 text-center" type="number" min="0" max="60" value={minutes === 0 ? "" : minutes} onChange={(e) => { handleTimeChange("minutes", e.target.value) }} />
+          <span>:</span>
+          <input disabled={isRunning} placeholder="Set Seconds" className="p-1 border-2 border-gray-600 w-30 text-center" type="number" min="0" max="60" value={seconds === 0 ? "" : seconds} onChange={(e) => { handleTimeChange("seconds", e.target.value) }} />
+        </div>
+
         <TimerDisplay timeLeft={timeLeft} />
-        <Controls onStart={handleOnStart} onPause={handleOnPush} onReset={handleOnReset} isRunnig={isRunning} isPush={isPush} />
+        <Controls onStart={handleOnStart} onPause={handleOnPush} onReset={handleOnReset} isRunning={isRunning} isPush={isPush} timeLeft={timeLeft} />
       </div>
 
     </div>
