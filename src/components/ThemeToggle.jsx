@@ -18,7 +18,7 @@ export const ThemeToggle = () => {
     return (
         <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-6">
             <h1 className="text-2xl font-bold">Pomodoro Timer</h1>
-            <button onClick={() => setDarkMode((prev) => !prev)} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#282c34] rotate-340 hover:rotate-0">
+            <button onClick={() => setDarkMode((prev) => !prev)} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#282c34]">
                 {darkMode ? (
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sun h-5 w-5">
                         <circle cx="12" cy="12" r="4"></circle>
